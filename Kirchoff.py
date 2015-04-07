@@ -3,6 +3,7 @@ class Array:
     def __init__(self, dimensions):
         self.dimensions = int(dimensions)
         self.array = [[0 for x in range(self.dimensions)] for x in range(self.dimensions)]
+        self.last_action = "We start with this array:"
 
     def addRow(self, row, values):
         for i in range(self.dimensions):
@@ -53,26 +54,21 @@ class Array:
 
     def deleteRow(self, row):
         tempArray = [[0 for x in range(self.dimensions)] for x in range(self.dimensions - 1)]
-        #print(tempArray)
         tempArrayRow = 0
         i = 0
         while(i < self.dimensions):
             if(i == row):
                 i+=1
                 continue
-            #print("i: " + str(i))
             for j in range(self.dimensions):
                 tempArray[tempArrayRow][j] = self.array[i][j]
             tempArrayRow += 1
             i+=1
-
-        #print(tempArray)
-
         self.array = tempArray
+        self.last_action = "Deleted row " + str(row + 1)
 
     def deleteColumn(self, column):
         tempArray = [[0 for x in range(self.dimensions - 1)] for x in range(self.dimensions)]
-        #print(tempArray)
         tempArrayColumn = 0
         j = 0
         for i in range(self.dimensions - 1):
@@ -85,20 +81,36 @@ class Array:
                 tempArrayColumn += 1
             tempArrayColumn = 0
             j = 0
-
-        #print(tempArray)
         self.array = tempArray
+        self.last_action += ". Deleted column " + str(column + 1)
 
 
     def addRowToRow(self, destination, source, coefficient=1):
         for i in range(self.dimensions):
             self.array[destination][i] += coefficient * self.array[source][i]
         self.print()
+        self.last_action = "R" + str(destination + 1) + " <- R" + str(destination + 1) + " + " + \
+                            str(coefficient) + "R" + str(source + 1)
 
     def subtractRowFromRow(self, destination, source, coefficient):
         for i in range(self.dimensions):
             self.array[destination][i] -= coefficient * self.array[source][i]
         self.print()
+        self.last_action = "R" + str(destination + 1) + " <- R" + str(destination + 1) + " - " + \
+                            str(coefficient) + "R" + str(source + 1)
+
+
+    def outputToFile(self):
+      output = open("output.txt", 'a')
+      output.write(self.last_action)
+      output.write('\n')
+      for i in range(self.dimensions):
+            for j in range(self.dimensions):
+                output.write(str(self.array[i][j]))
+                output.write(" ")
+            output.write('\n')
+      output.close()
+
 
 
 def main():
@@ -126,6 +138,7 @@ def main():
         print("3. Delete a row and column")
         print("4. Add row to another row")
         print("5. Subtract row from another row")
+        print("6. Output to file")
         print('')
         action = input()
         if(action == "2"):
@@ -157,6 +170,8 @@ def main():
             theArray.subtractRowFromRow(int(destination) - 1, int(source) - 1, int(coefficient))
         elif(action == "0"):
             proceed = False
+        elif(action == "6"):
+            theArray.outputToFile()
         else:
             proceed = input("Enter 1 to proceed or press enter to exit: ")
 
