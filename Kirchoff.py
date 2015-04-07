@@ -65,7 +65,7 @@ class Array:
             tempArrayRow += 1
             i+=1
         self.array = tempArray
-        self.last_action = "Deleted row " + str(row + 1)
+        self.last_action += "\nDeleted row " + str(row + 1)
 
     def deleteColumn(self, column):
         tempArray = [[0 for x in range(self.dimensions - 1)] for x in range(self.dimensions)]
@@ -82,21 +82,21 @@ class Array:
             tempArrayColumn = 0
             j = 0
         self.array = tempArray
-        self.last_action += ". Deleted column " + str(column + 1)
+        self.last_action += "\nDeleted column " + str(column + 1)
 
 
     def addRowToRow(self, destination, source, coefficient=1):
         for i in range(self.dimensions):
             self.array[destination][i] += coefficient * self.array[source][i]
         self.print()
-        self.last_action = "R" + str(destination + 1) + " <- R" + str(destination + 1) + " + " + \
+        self.last_action += "\nR" + str(destination + 1) + " <- R" + str(destination + 1) + " + " + \
                             str(coefficient) + "R" + str(source + 1)
 
     def subtractRowFromRow(self, destination, source, coefficient):
         for i in range(self.dimensions):
             self.array[destination][i] -= coefficient * self.array[source][i]
         self.print()
-        self.last_action = "R" + str(destination + 1) + " <- R" + str(destination + 1) + " - " + \
+        self.last_action += "\nR" + str(destination + 1) + " <- R" + str(destination + 1) + " - " + \
                             str(coefficient) + "R" + str(source + 1)
 
 
@@ -110,6 +110,7 @@ class Array:
                 output.write(" ")
             output.write('\n')
       output.close()
+      self.last_action = ""
 
 
 
@@ -158,7 +159,7 @@ def main():
             while(int(source) > theArray.dimensions or int(source) <= 0):
                 source = input("Enter the row you wish to change: ")
             coefficient = input("Enter the coefficient: ")
-            theArray.addRowToRow(int(destination) - 1, int(source) - 1, int(coefficient))
+            theArray.addRowToRow(int(destination) - 1, int(source) - 1, float(coefficient))
         elif(action == "5"):
             destination = input("Enter the row you wish to change: ")
             while(int(destination) > theArray.dimensions or int(destination) <= 0):
@@ -167,7 +168,7 @@ def main():
             while(int(source) > theArray.dimensions or int(source) <= 0):
                 source = input("Enter the row you wish to change: ")
             coefficient = input("Enter the coefficient: ")
-            theArray.subtractRowFromRow(int(destination) - 1, int(source) - 1, int(coefficient))
+            theArray.subtractRowFromRow(int(destination) - 1, int(source) - 1, float(coefficient))
         elif(action == "0"):
             proceed = False
         elif(action == "6"):
